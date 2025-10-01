@@ -1,0 +1,12 @@
+#!/usr/bin/env python3
+import json, os, sys
+
+# Allow overriding command via env if desired
+cmd = os.environ.get("START_CMD", "python zytepitchbook.py")
+
+info = {
+    "spiders": [
+        {"id": "run", "cmd": cmd}
+    ]
+}
+json.dump(info, sys.stdout)
