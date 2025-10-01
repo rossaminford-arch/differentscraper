@@ -1,25 +1,10 @@
 #!/usr/bin/env python3
-import json, os, sys
-
-# Build command as argv list
-start_cmd = os.environ.get("START_CMD")
-if start_cmd:
-    if start_cmd.strip().startswith('['):
-        try:
-            cmd = json.loads(start_cmd)
-        except Exception:
-            cmd = start_cmd.split()
-    else:
-        cmd = start_cmd.split()
-else:
-    cmd = ["python", "zytepitchbook.py"]
+# MUST output a single JSON object to STDOUT, no extra prints.
+import json, sys
 
 info = {
-    "version": "1.0",
-    "project_type": "other",
-    "spiders": [
-        {"id": "run", "cmd": cmd}
-    ]
+    "project_type": "other",           # one of: scrapy, casperjs, other
+    "spiders": ["run"]                 # list of non-empty STRING spider names
 }
 json.dump(info, sys.stdout)
 sys.stdout.write("\n")
