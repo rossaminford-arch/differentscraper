@@ -1,0 +1,37 @@
+#!/usr/bin/env python3
+import json, os, sys, subprocess
+
+# Determine which spider to run
+spider = os.environ.get("SHUB_SPIDER", "run")
+
+# Only one spider supported for now
+if spider != "run":
+    sys.stderr.write(f"Unknown spider: {spider}\n")
+    sys.exit(2)
+
+# Base command
+start_cmd = os.environ.get("START_CMD")
+if start_cmd:
+    if start_cmd.strip().startswith('['):
+        try:
+            cmd = json.loads(start_cmd)
+        except Exception:
+            cmd = start_cmd.split()
+    else:
+        cmd = start_cmd.split()
+else:
+    cmd = ["python", "zytepitchbook.py"]
+
+# Append job args if provided
+job_data = os.environ.get("SHUB_JOB_DATA")
+if job_data:
+    try:
+        data = json.loads(job_data)
+        extra = data.get("job_cmd") or []
+        if isinstance(extra, list):
+            cmd.extend(extra)
+    except Exception:
+        pass
+
+# Run it
+os.execvp(cmd[0], cmd)
