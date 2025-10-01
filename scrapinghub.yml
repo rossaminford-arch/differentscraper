@@ -1,0 +1,6 @@
+image: custom
+commands:
+  build:
+    - pip install --no-cache-dir -r requirements.txt
+  start:
+    - python zytepitchbook.py
